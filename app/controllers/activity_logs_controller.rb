@@ -9,8 +9,8 @@ class ActivityLogsController < ApplicationController
     # lists activities of a camera in a given interval
     #
     # ==== Params (GET)
-    #   +:begin+ - begin datetime
-    #   +:end+ - end datetime
+    #   +:begin+ - begin datetime string
+    #   +:end+ - end datetime string
     #
     # ==== Reponse
     #   +json+
@@ -20,21 +20,21 @@ class ActivityLogsController < ApplicationController
         @begin = params[:begin]
         @end = params[:end]
         
-        # TEMPORARY
+        # -- TEMPORARY --
         # for now, the app is only working with a single camera per user
         @activity_logs = current_user.default_camera.activity_logs
 
         # default interval is 1 hour
         if !@begin or !@begin.to_datetime
-            @begin = @activity_logs.last.created_at - 1.hour
+            @begin = @activity_logs.last.updated_at - 1.hour
         end
         if !@end or !@end.to_datetime
-            @end = @activity_logs.last.created_at
+            @end = @activity_logs.last.updated_at
         end
 
         @selected_activities = @activity_logs.find (
             :all, 
-            :conditions => ['created_at >= ? and created_at <= ?', @begin.to_datetime, @end.to_datetime ]
+            :conditions => ['updated_at >= ? and created_at <= ?', @begin.to_datetime, @end.to_datetime ]
         )
         
         respond_to do |f|
@@ -66,7 +66,7 @@ class ActivityLogsController < ApplicationController
             
             @level = params[:level].to_f
             
-            # the activities are clustered in one row of the db, unless they are far apart,
+            # the activities are clustered in a string, stored in a single row of the db, unless they are far apart,
             # in which case a new row is created
             # the interval is determined by INTERVAL_BETWEEN_ACTIVITY_CHUNKS
             # see config/application.rb
