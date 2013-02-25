@@ -10,6 +10,12 @@ if defined?(Bundler)
 end
 
 module OmniEye
+
+    # intervals between updates, in seconds
+    INTERVAL_BETWEEN_ACTIVITY_UPDATES = 0.8
+    INTERVAL_BETWEEN_SNAPSHOT_UPLOADS = 1
+    INTERVAL_BETWEEN_ACTIVITY_CHUNKS = 30
+
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
