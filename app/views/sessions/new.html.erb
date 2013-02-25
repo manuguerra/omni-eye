@@ -1,0 +1,16 @@
+<% provide(:title, "Login") %>
+
+<% flash.each do |key, value| %>
+    <div class = "alert alert-<%= key %>"><%= value %></div>
+<% end %>
+
+<% if !params[:layout] %>
+    <h1>Login</h1>
+    <div class="row">
+        <div class="span6 offset3">
+            <%= render 'login_form' %>
+        </div>
+    </div>
+<% else %>
+    <%= render 'login_form' %>
+<% end %>

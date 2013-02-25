@@ -1,0 +1,13 @@
+Mon, 25 Feb 2013 13:43:10 -0300
+app/helpers/static_pages_helper.rb	Thu, 14 Feb 2013 16:45:37 -0200
+app/controllers/static_pages_controller.rb	Mon, 18 Feb 2013 16:23:27 -0300
+app/helpers/application_helper.rb	Thu, 14 Feb 2013 16:34:21 -0200
+app/controllers/activity_logs_controller.rb	Mon, 25 Feb 2013 13:41:51 -0300
+app/models/user.rb	Sat, 23 Feb 2013 23:43:32 -0300
+app/models/camera.rb	Sat, 23 Feb 2013 23:54:10 -0300
+app/helpers/sessions_helper.rb	Sat, 23 Feb 2013 23:17:18 -0300
+app/controllers/application_controller.rb	Mon, 18 Feb 2013 15:04:51 -0300
+doc/README_FOR_APP	Thu, 14 Feb 2013 16:34:21 -0200
+app/helpers/activity_logs_helper.rb	Sat, 23 Feb 2013 23:20:32 -0300
+app/controllers/sessions_controller.rb	Mon, 18 Feb 2013 16:09:42 -0300
+app/models/activity_log.rb	Mon, 25 Feb 2013 13:16:27 -0300

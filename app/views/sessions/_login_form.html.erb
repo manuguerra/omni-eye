@@ -1,0 +1,12 @@
+<%= form_for(:session, :url => sessions_path, :remote => true) do |f| %>
+
+    <%= f.label "email" %>
+    <%= f.text_field :email %>
+
+    <%= f.label "password" %>
+    <%= f.password_field :password %>
+    <br>
+    <%= f.submit "login", :class => "btn btn-success" %>
+    <button type="button" data-dismiss="modal" class="btn">cancel</button>
+<% end %>
+<br>
