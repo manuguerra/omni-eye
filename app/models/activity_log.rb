@@ -14,8 +14,9 @@ class ActivityLog < ActiveRecord::Base
   attr_accessible :level, :datetime
 
   belongs_to :camera
+  has_many  :snapshots, :dependent => :destroy
 
-#  validates_presence_of :level
+  validates_presence_of :level
 
   
 end
