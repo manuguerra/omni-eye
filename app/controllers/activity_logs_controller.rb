@@ -47,6 +47,14 @@ class ActivityLogsController < ApplicationController
     # show
     # 
     def show
+        respond_to do |f| 
+            f.json {
+                render :json => { 
+                    :activity_log => @activity_log.to_json,
+                    :snapshots => @activity_log.snapshots.to_json
+                }
+            }
+        end
     end
     
     # create
@@ -97,6 +105,7 @@ class ActivityLogsController < ApplicationController
         end
     end
 
+
     private 
         # uploads snapshot
         def upload_snapshot
@@ -105,7 +114,7 @@ class ActivityLogsController < ApplicationController
         # grants access only to the owner of the log
         def correct_user
             @activity_log = ActivityLog.find params[:id]
-            @user = @activity_log.user
+            @user = @activity_log.camera.user
             redirect_to root_url unless current_user?(@user)
         end
         
