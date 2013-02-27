@@ -45,17 +45,26 @@ class ActivityLogsController < ApplicationController
     end
     
     # show
-    # 
+    #
+    # renders ActivityLog levels and snapshots
+    #
+    # ==== Params (GET)
+    #   +:id+ - ActivityLog id
+    #
+    # ==== Reponse
+    #   +json+
+    #     
     def show
         respond_to do |f| 
             f.json {
                 render :json => { 
-                    :activity_log => @activity_log.to_json,
-                    :snapshots => @activity_log.snapshots.to_json
+                    :activity_log => @activity_log,
+                    :snapshots => @activity_log.snapshots
                 }
             }
         end
     end
+
     
     # create
     #

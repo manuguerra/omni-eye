@@ -32,16 +32,26 @@
     height: 10px;
 }
 
-.level_bar:hover {
-    background: rgba(250,250,0, 1.0);
-}
-
 .separator_bar {
     position: relative;
-    height: 100px;
+    height: 60px;
     width: 1px;
     background: none;
     border-style:dashed;
     border-width:1px;
     border-color: rgba(0,0,0,1.0);
+}
+
+.activity_chunk {
+    height: auto;
+    width: 100%;
+
+    background: rgb(253, 226, 226);
+}
+
+.activity_chunk:hover {
+    height: auto;
+    width: 100%;
+
+   background: rgb(250,250,100);
 }
