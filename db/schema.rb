@@ -10,13 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226212845) do
+ActiveRecord::Schema.define(:version => 20130227163041) do
 
   create_table "activity_logs", :force => true do |t|
     t.integer  "camera_id"
-    t.string   "level"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "level",      :limit => 255
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.datetime "datetime"
   end
 
