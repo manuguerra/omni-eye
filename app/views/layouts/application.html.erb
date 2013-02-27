@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>OmniEye</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+    <head>
+      <title>OmniEye</title>
+      <%= stylesheet_link_tag    "application", :media => "all" %>
+      <%= javascript_include_tag "application" %>
+      <%= csrf_meta_tags %>
+  </head>
 
-<%= yield %>
+    <body>
+        <%= render 'layouts/header' %>  
 
-</body>
+        <div class="main_container">
+            <%= yield %>
+        </div>
+    </body>
+
 </html>
