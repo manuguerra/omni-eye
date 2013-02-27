@@ -1,0 +1,2 @@
+module SnapshotRequestsHelper
+end
