@@ -87,7 +87,7 @@ $(document).ready(function() {
                 $("#activ_bar").css("width", c);
             },          
             50
-        );
+    );
 
     /**
     * postActivity
@@ -127,11 +127,45 @@ $(document).ready(function() {
         return img
     }
 
+    
     var display_image = function( img_data ) {
         var img = new Image();
         img.src = img_data;
         $("body").append( img );
     }
+
+    
+    var checkForNewSnapshotRequest = function() {
+         console.log("checking for new snapshot request...");
+ 
+        $.get('/snapshot/check.json', 
+            function(data) {
+                console.log (data);
+                if (data.new) {
+                    console.log("new snapshot requested");
+                    uploadSnapshot();
+                }
+                else {
+                  
+                }
+                setTimeout( checkForNewSnapshotRequest, 1000 ); 
+            }
+        );
+    }
+
+    var uploadSnapshot = function() {
+        console.log("uploading snapshot...");
+        $.post('/snapshot/upload.json', 
+            {
+                image:  capture_image()
+            },
+            function(data) {
+                console.log("snapshot uploaded");
+            }
+        );
+    }
+
+    checkForNewSnapshotRequest();
 });
 
 

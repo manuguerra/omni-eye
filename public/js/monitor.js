@@ -32,8 +32,8 @@ $(document).ready(function() {
         else {
             $.get('/activity_logs.json', 
                 {
-                    //begin: beginTime,
-                    //end: endTime
+                    // begin: beginTime,
+                    // end: endTime
                 },
                 function(data) {
                     parseActivityData( data );
@@ -60,7 +60,7 @@ $(document).ready(function() {
         if (data.length > 0) {
             last_entry = data[data.length-1];
         
-            beginTime = last_entry.updated_at;
+            beginTime = last_entry.created_at;
             endTime = last_entry.updated_at;
         }
 
@@ -103,8 +103,6 @@ $(document).ready(function() {
         var bar = jQuery('<div/>', {
             id: '',
             class: 'level_bar'
-            //width: '100px',
-            //height: '5px'
         }).prependTo('#chunk_'+chunkId);        
 
         level = 3*parseFloat(level);
@@ -166,7 +164,7 @@ $(document).ready(function() {
 
         $.get('/activity_logs/'+activityLogId+'.json', 
             function(data) {
-                showSnapshots( data.snapshots );      
+                showSnapshots( data );      
             }
         );
     }
@@ -178,10 +176,69 @@ $(document).ready(function() {
     * @param  
     * @return
     */
-    var showSnapshots = function( snapshots ) {
+    var showSnapshots = function( data ) {           
+        
+        snapshots = data.snapshots
+
+        openSnapshotsContainer(data.activity_log);
+
         for (var i = 0; i < snapshots.length; i++) {
             var img_data = snapshots[i].img_data;
             displayImage( img_data );
+        }
+    }
+
+    var openSnapshotsContainer = function(data) {
+
+        var container = $("#snapshots_container").id;
+        
+        if (container) {
+            $(container).empty();
+            $("#snapshots_container_side_window").empty();
+        }
+        else {
+            jQuery('<div/>', {
+                id: 'snapshots_container'
+            }).appendTo("#monitor_side_window"); 
+
+            jQuery('<div/>', {
+                id: 'snapshots_container_side_window'
+            }).appendTo("#monitor_side_window");
+
+            var closeButton = jQuery('<button/>', {
+                type: 'button',
+                class: 'btn btn-mini btn-info',
+                html: "x close window"
+            });
+
+            closeButton.appendTo("#snapshots_container_side_window");
+            closeButton.click( function() {
+                closeSnapshotsContainer();
+            });
+
+            var createdAt = new Date(data.created_at);
+            var updatedAt = new Date(data.updated_at);
+
+            $("#snapshots_container_side_window").append("<br><br> begin: " + createdAt + "<br>");
+            $("#snapshots_container_side_window").append("end: " + updatedAt);
+        }
+                
+    }
+
+    var closeSnapshotsContainer = function() {
+        var container = $("#snapshots_container");
+        
+        if (container) {
+            $(container).fadeOut( 
+                    function() {
+                         $(container).remove();
+                    }
+            );
+            $("#snapshots_container_side_window").fadeOut(
+                    function() {
+                         $("#snapshots_container_side_window").remove();
+                    }
+            );
         }
     }
 
@@ -189,16 +246,45 @@ $(document).ready(function() {
     var displayImage = function( img_data ) {
         var img = new Image();
         img.src = img_data;
-        $("#monitor_side_window").prepend( img );
+        
+        var imgDiv = jQuery('<div/>', {
+            class: 'snapshot'
+        });    
+        
+        imgDiv.html(img);
+        
+        $("#snapshots_container").prepend( imgDiv );
     }
 
     
-    var requestSnapshot = function() {
-        $.post('/snapshot.json', 
+    var requestSingleSnapshot = function() {
+        $.post('/snapshot/request.json', 
             function(data) {
-                console.log(data)
+                console.log(data);
             }
         ); 
+    }
+
+   var grabSingleSnapshot = function() {
+        $.get('/snapshot/grab.json', 
+            function(data) {
+                console.log(data);
+            }
+        ); 
+    }
+
+    var checkForNewSnapshot = function() {
+         $.get('/snapshot/check.json', 
+            function(data) {
+                console.log(data);
+                if (data.new) {
+                    setTimeout( checkForNewSnapshot, 1000 );
+                }
+                else {
+                    grabSingleSnapshot();
+                }
+            }
+        );
     }
 
     // launches monitor thread

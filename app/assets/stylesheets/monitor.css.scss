@@ -23,7 +23,11 @@
     bottom: 0px;
     overflow-y: hidden;
     overflow-x: auto;
-    background: rgb(200,200,200);
+    background: url('subtle_surface.png');
+    
+    -moz-box-shadow: 0px 0px 5px  #aaa;
+    -webkit-box-shadow: 0px 0px 5px  #aaa;
+    box-shadow:0px 0px 5px #aaa;
 }
 
 #monitor_timeline {
@@ -32,8 +36,57 @@
     width: 10000px;
     height: 100%;
     background: none;
-    text-align: left;
+    
     overflow-x: auto;
+}
+
+#snapshots_container {
+    width: auto;
+    height: auto;
+
+    padding: 10px;
+    
+    position: absolute;
+    left: 250px;
+    right: 10px;
+
+    overflow: hidden;
+    
+    background: rgba(255,255,255, 0.6);
+    
+    display: inline-block;
+    -moz-box-shadow: 0px 0px 5px 1px  #aaa;
+    -webkit-box-shadow: 0px 0px 5px 1px #aaa;
+    box-shadow:0px 0px 5px 1px #aaa;
+}
+
+
+#snapshots_container_side_window {
+    position: fixed;
+    
+    left: 5px;
+    
+    width: 230px;
+    height: 300px;
+    background: rgba(255,255,255, 0.6);
+    
+    text-align: left;
+    padding: 5px;
+
+    -moz-box-shadow: -1px 0px 5px 1px  #aaa;
+    -webkit-box-shadow: -1px 0px 5px 1px #aaa;
+    box-shadow:-1px 0px 5px 1px #aaa;
+}
+
+.snapshot {
+    margin: 2px;
+    position: relative;
+
+    -moz-box-shadow: 0px 0px 2px 1px  #777;
+    -webkit-box-shadow: 0px 0px 2px 1px #777;
+    box-shadow:0px 0px 2px 1px #777;
+
+    float: left;
 }
 
 .level_bar {
@@ -55,8 +108,8 @@
 
     background: none;
     border-style:dashed;
-    border-width:1px;
-    border-color: rgba(0,0,0,1.0);
+    border-width:2px;
+    border-color: rgba(100,100,100,0.8);
 }
 
 .activity_chunk {
@@ -64,6 +117,10 @@
     width: auto;
     
     float: left;
+
+    -moz-box-shadow: 0px 0px 3px  #aaa;
+    -webkit-box-shadow: 0px 0px 3px  #aaa;
+    box-shadow:0px 0px 3px #aaa;
 
     background: rgb(253, 226, 226);
 }

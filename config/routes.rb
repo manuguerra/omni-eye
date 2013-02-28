@@ -18,6 +18,8 @@ OmniEye::Application.routes.draw do
     resources :activity_logs
 
     #snapshot_requests
-    match '/snapshot',  :to => 'snapshot_requests#request', :via => [:post]
-
+    match '/snapshot/request',  :to => 'snapshot_requests#requestSnapshot', :via => [:post]
+    match '/snapshot/check',    :to => 'snapshot_requests#checkNewRequest', :via => [:get]
+    match '/snapshot/upload',     :to => 'snapshot_requests#takeSnapshot',    :via => [:post]
+    match '/snapshot/grab',     :to => 'snapshot_requests#grabSnapshot',    :via => [:get]
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130227195944) do
+ActiveRecord::Schema.define(:version => 20130228181048) do
 
   create_table "activity_logs", :force => true do |t|
     t.integer  "camera_id"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20130227195944) do
     t.datetime "requested_at"
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
+    t.datetime "taken_at"
   end
 
   create_table "snapshots", :force => true do |t|
