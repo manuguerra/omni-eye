@@ -18,29 +18,31 @@ $(document).ready(function() {
     * @return
     */
     var getActivityData = function() {
-        // console.log("fetching new data...");
-
+        console.log("= = = = = = = = = =");
+        console.log("fetching new data...");
+        
         if (beginTime < 0 || endTime < 0) {
             $.get('/activity_logs.json', 
                 function(data) {
                     parseActivityData( data );
-                    setTimeout( function() { getActivityData() }, 1000);                    
+                    setTimeout( function() { getActivityData() }, 3000);  
                 }
             );
         }
         else {
             $.get('/activity_logs.json', 
                 {
-                    begin: beginTime,
-                    end: endTime
+                    //begin: beginTime,
+                    //end: endTime
                 },
                 function(data) {
                     parseActivityData( data );
-                    setTimeout( function() { getActivityData() }, 1000);
+                    setTimeout( function() { getActivityData() }, 3000);  
                 }
             );
         }
-    }
+        
+            }
 
 
     /**
@@ -61,7 +63,7 @@ $(document).ready(function() {
             beginTime = last_entry.updated_at;
             endTime = last_entry.updated_at;
         }
-        
+
         for (var i = 0; i < data.length; i++) {
             levels = data[i].level.split(" ");            
             nLevels = levels.length;
@@ -70,17 +72,17 @@ $(document).ready(function() {
             if (data[i].id > lastId) {
                 
                 addActivityChunk(data[i].id);
-
                 lastId = data[i].id;
                 chunkSize = 0;
                 addSeparatorBar();
             }
             
-            // adds level bars
-            for (var j = chunkSize; j < nLevels; j++) {
-                addLevelBar(levels[j], 0, 0, 0, data[i].id);
-                chunkSize
-                chunkSize++;
+            if (data[i].id == lastId) {
+                for (var j = chunkSize; j < nLevels; j++) {
+                    addLevelBar(levels[j], 0, 0, 0, data[i].id);
+                    chunkSize
+                    chunkSize++;
+                }
             }
         }
     }
@@ -190,6 +192,14 @@ $(document).ready(function() {
         $("#monitor_side_window").prepend( img );
     }
 
+    
+    var requestSnapshot = function() {
+        $.post('/snapshot.json', 
+            function(data) {
+                console.log(data)
+            }
+        ); 
+    }
 
     // launches monitor thread
     getActivityData();

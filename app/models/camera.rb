@@ -12,7 +12,8 @@
 
 class Camera < ActiveRecord::Base
   
-    belongs_to :user
+    belongs_to  :user
 
-    has_many :activity_logs
+    has_many    :activity_logs
+    has_one     :snapshot_request
 end
