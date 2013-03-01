@@ -34,6 +34,7 @@ class CameraStatusesController < ApplicationController
 
     private
 
+
     def correct_user
         # TEMPORARY
         @camera = current_user.default_camera
