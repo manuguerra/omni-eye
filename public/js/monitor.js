@@ -1,5 +1,19 @@
 $(document).ready(function() {
     $("#snapshot_request").click( function() {
+
+        var imgDiv = $("#requested_snapshot");
+
+        if ( imgDiv.length == 0 ) {
+            imgDiv = jQuery('<div/>', {
+                id: 'requested_snapshot',
+                class: 'snapshot'
+            });    
+        }
+        
+        imgDiv.html("<img src = '/assets/spinner.gif'/>");
+
+        imgDiv.appendTo("#monitor_side_window");
+        
         requestSingleSnapshot();
         checkForNewSnapshot();
     });
@@ -162,9 +176,16 @@ $(document).ready(function() {
     * @return
     */
     var getSnapshots = function( activityLogId ) {
-    
+        
+        var spinner = jQuery('<div/>', {
+            class: 'spinner',
+            html: "<img src = 'assets/loading_bar.gif'/>"
+        });
+        spinner.appendTo( "#monitor_side_window" );
+
         $.get('/activity_logs/'+activityLogId+'.json', 
             function(data) {
+                $(".spinner").remove();
                 showSnapshots( data );      
             }
         );
@@ -278,6 +299,7 @@ $(document).ready(function() {
 
     
     var requestSingleSnapshot = function() {
+
         $.post('/snapshot/request.json', 
             function(data) {
                 // console.log(data);
@@ -295,13 +317,6 @@ $(document).ready(function() {
                 img.src = img_data;
                 
                 var imgDiv = $("#requested_snapshot");
-
-                if ( !$(imgDiv).id ) {
-                    imgDiv = jQuery('<div/>', {
-                        id: 'requested_snapshot',
-                        class: 'snapshot'
-                    });    
-                }
                 
                 imgDiv.html(img);
 
@@ -311,7 +326,6 @@ $(document).ready(function() {
                 });
 
                 $("#monitor_side_window").append( imgDiv );
-
             }
         ); 
     }
@@ -319,7 +333,6 @@ $(document).ready(function() {
     var checkForNewSnapshot = function() {
          $.get('/snapshot/check.json', 
             function(data) {
-                console.log(data);
                 if (data.new) {
                     setTimeout( checkForNewSnapshot, 1000 );
                 }
