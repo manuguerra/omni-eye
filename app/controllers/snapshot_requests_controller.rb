@@ -61,7 +61,7 @@ class SnapshotRequestsController < ApplicationController
     #   +json+
     #    
     def checkNewRequest
-        @new_request = @request.requested_at - (@request.taken_at||0) > 0
+        @new_request = @request.requested_at - (@request.taken_at || @request.requested_at) >= 0
 
         respond_to do |f|
             f.json { 
