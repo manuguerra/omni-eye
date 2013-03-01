@@ -162,7 +162,7 @@ $(document).ready(function() {
     * @return
     */
     var getSnapshots = function( activityLogId ) {
-
+    
         $.get('/activity_logs/'+activityLogId+'.json', 
             function(data) {
                 showSnapshots( data );      
@@ -185,10 +185,13 @@ $(document).ready(function() {
 
         for (var i = 0; i < snapshots.length; i++) {
             var img_data = snapshots[i].img_data;
-            displayImage( img_data );
+
+            displayImage({
+                img_data: img_data, 
+                datetime: snapshots[i].updated_at 
+            });
         }
     }
-
 
     var openSnapshotsContainer = function(data) {
         var container = $("#snapshots_container");
@@ -244,9 +247,20 @@ $(document).ready(function() {
     }
 
 
-    var displayImage = function( img_data ) {
+    var addDatetimeToDiv = function ( args ) {
+
+        var localDate = new Date( args.datetime );
+        jQuery('<div/>', {
+            html: localDate,
+            class: 'snapshot_datetime'
+        }).appendTo( args.div );
+    }
+
+
+    var displayImage = function( args ) {
+
         var img = new Image();
-        img.src = img_data;
+        img.src = args.img_data;
         
         var imgDiv = jQuery('<div/>', {
             class: 'snapshot'
@@ -254,6 +268,11 @@ $(document).ready(function() {
         
         imgDiv.html(img);
         
+        addDatetimeToDiv({ 
+            div: imgDiv,
+            datetime: args.datetime
+        });
+
         $("#snapshots_container").prepend( imgDiv );
     }
 
@@ -285,7 +304,12 @@ $(document).ready(function() {
                 }
                 
                 imgDiv.html(img);
-                
+
+                addDatetimeToDiv({ 
+                    div: imgDiv,
+                    datetime: data.taken_at
+                });
+
                 $("#monitor_side_window").append( imgDiv );
 
             }

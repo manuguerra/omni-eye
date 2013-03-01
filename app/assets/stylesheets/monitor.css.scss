@@ -149,9 +149,9 @@ snapshots & activity info
     text-align: left;
     padding: 5px;
 
-    -moz-box-shadow: -1px 0px 5px 1px  #aaa;
-    -webkit-box-shadow: -1px 0px 5px 1px #aaa;
-    box-shadow:-1px 0px 5px 1px #aaa;
+    -moz-box-shadow: -1px 0px 5px #aaa;
+    -webkit-box-shadow: -1px 0px 5px #aaa;
+    box-shadow:-1px 0px 5px #aaa;
 
 }
 
@@ -159,11 +159,22 @@ snapshots & activity info
     margin: 2px;
     position: relative;
 
-    -moz-box-shadow: 0px 0px 2px 1px  #777;
-    -webkit-box-shadow: 0px 0px 2px 1px #777;
-    box-shadow:0px 0px 2px 1px #777;
+    -moz-box-shadow: 0px 0px 8px  #888;
+    -webkit-box-shadow: 0px 0px 8px #888;
+    box-shadow:0px 0px 8px #888;
 
     float: left;
+}
+
+.snapshot_datetime {
+    background: rgba(255,255,255,0.8);
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    display: inline-block;
+    height: auto;
+    width: auto;
+    opacity: 0.8;
 }
 /************************/
 
