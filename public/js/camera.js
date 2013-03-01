@@ -89,6 +89,7 @@ $(document).ready(function() {
             50
     );
 
+
     /**
     * postActivity
     * posts activity level and datetime using ajax
@@ -117,13 +118,19 @@ $(document).ready(function() {
         );
     }
 
+    var updateCameraStatus = function() {
+         $.post('/camera/status.json', {},
+                 function( data ) {
+                     setTimeout( updateCameraStatus, 1000 );
+                 }
+        );
+    }
+
     var capture_image = function() {
         var canvas = document.getElementById('canvas')
         var context = canvas.getContext("2d");
         var img     = canvas.toDataURL("image/jpeg", 0.5);
-        // var item_image = img.replace(/^data:image/jpeg;base64,/, "") ;
-        // return item_image;
-        // display_image(img);
+
         return img
     }
 
@@ -166,6 +173,8 @@ $(document).ready(function() {
     }
 
     checkForNewSnapshotRequest();
+    updateCameraStatus();
+
 });
 
 

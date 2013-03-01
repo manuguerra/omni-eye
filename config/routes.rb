@@ -20,6 +20,11 @@ OmniEye::Application.routes.draw do
     #snapshot_requests
     match '/snapshot/request',  :to => 'snapshot_requests#requestSnapshot', :via => [:post]
     match '/snapshot/check',    :to => 'snapshot_requests#checkNewRequest', :via => [:get]
-    match '/snapshot/upload',     :to => 'snapshot_requests#takeSnapshot',    :via => [:post]
+    match '/snapshot/upload',   :to => 'snapshot_requests#takeSnapshot',    :via => [:post]
     match '/snapshot/grab',     :to => 'snapshot_requests#grabSnapshot',    :via => [:get]
+
+    #camera_status
+    match '/camera/status', :to => 'camera_statuses#show',      :via => [:get]
+    match '/camera/status', :to => 'camera_statuses#update',    :via => [:post]
+
 end

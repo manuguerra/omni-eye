@@ -16,4 +16,5 @@ class Camera < ActiveRecord::Base
 
     has_many    :activity_logs
     has_one     :snapshot_request
+    has_one     :camera_status
 end

@@ -3,20 +3,25 @@
 <br>
 <center>
 
-
     <br><br>
    
     <div id = "monitor_main_window">        
         <div id = "monitor_side_window">
             <div id = "monitor_menu">
                 <a id = "snapshot_request" class = "btn" type = "button">
-                    <i class ="icon-camera"></i> request a snapshot
+                    <i class ="icon-camera"></i> grab a snapshot
                 </a>
+                
+                <span>
+                    <span id = "camera_status" class = "camera_info"></span>
+                    <span id = "camera_last_seen" class = "camera_info"></span>
+                    <span id = "camera_ip" class = "camera_info"></span>
+                </span>
             </div>
         </div>
         <div id = "timeline_window">
 
-            <div class="alert alert-info" style = "position: absolute; z-index: 1000; margin: 5px ">
+            <div class="alert alert-info" style = "position: absolute; z-index: 1000; right: 5px; bottom: 70px ">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
               <strong>Activity timeline</strong> click on a cluster to see snapshots and get more info.
            </div>            

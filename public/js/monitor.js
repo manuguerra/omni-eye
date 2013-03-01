@@ -17,6 +17,11 @@ $(document).ready(function() {
         requestSingleSnapshot();
         checkForNewSnapshot();
     });
+
+    // launches monitor thread
+    getActivityData();
+    checkCameraStatus();
+
 });
      
     // time interval
@@ -53,8 +58,8 @@ $(document).ready(function() {
                     // end: endTime
                 },
                 function(data) {
-                    parseActivityData( data );
-                    setTimeout( function() { getActivityData() }, 3000);  
+                    parseActivityData( data ); 
+                    setTimeout( function() { getActivityData() }, 2000);  
                 }
             );
         }    
@@ -79,7 +84,7 @@ $(document).ready(function() {
             beginTime = last_entry.created_at;
             endTime = last_entry.updated_at;
         }
-
+        
         for (var i = 0; i < data.length; i++) {
             levels = data[i].level.split(" ");            
             nLevels = levels.length;
@@ -92,7 +97,7 @@ $(document).ready(function() {
                 chunkSize = 0;
                 addSeparatorBar();
             }
-            
+
             if (data[i].id == lastId) {
                 for (var j = chunkSize; j < nLevels; j++) {
                     addLevelBar(levels[j], 0, 0, 0, data[i].id);
@@ -154,13 +159,12 @@ $(document).ready(function() {
     * @param 
     * @return
     */
-    var addActivityChunk = function(chunkId) {
+    var addActivityChunk = function(chunkId) { 
+
         var chunk = jQuery('<div/>', {
             id: 'chunk_'+chunkId,
             class: 'activity_chunk'
         }).prependTo('#monitor_timeline');        
-        
-        $(chunk).css("position", "relative");
 
         $(chunk).click( function() {
             getSnapshots( chunkId );
@@ -343,7 +347,31 @@ $(document).ready(function() {
         );
     }
 
-    // launches monitor thread
-    getActivityData();
+    var checkCameraStatus = function() {
+        $.get("/camera/status.json",
+                function( data ) {
+                    console.log(data);
+                    if (data.live) {
+                        $("#camera_status").html( "camera is online" );
+                        $("#camera_last_seen").html( "" );
+                        $("#camera_ip").html( "on ip: " + data.ip );
 
+                        if ( !$("#snapshot_request").is(":visible") ) {
+                             $("#snapshot_request").fadeIn();
+                        }
+                    }
+                    else {
+                        $("#camera_status").html( "camera is offline" );
+                        var date = new Date( data.last_seen );
+                        $("#camera_last_seen").html( "last seen: " + date );
+                        $("#camera_ip").html( "on ip: " + data.ip );
 
+                        if ( $("#snapshot_request").is(":visible") ) {
+                             $("#snapshot_request").fadeOut();
+                        }                    
+                    }
+
+                    setTimeout( checkCameraStatus, 5000 );
+                }
+        );
+    }

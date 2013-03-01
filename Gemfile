@@ -12,6 +12,7 @@ gem 'annotate'
 gem 'bootstrap-sass'
 gem 'bcrypt-ruby'
 
+gem 'geocoder'
 
 group :production do
     gem 'unicorn'

@@ -1,0 +1,2 @@
+module CameraStatusesHelper
+end

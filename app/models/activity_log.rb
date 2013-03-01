@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  camera_id  :integer
-#  level      :string(255)
+#  level      :text(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  datetime   :datetime
