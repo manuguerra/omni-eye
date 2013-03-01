@@ -7,13 +7,21 @@
       <nav>
         <ul class="nav pull-right">
 
-            <li><%= link_to "camera app", camera_url %></li> 
-            <li><%= link_to "remote monitor", monitor_url %> </li>
+            <li>
+                <%= link_to camera_url do %>
+                    <i class = "icon-facetime-video"></i> camera app
+                <% end %>
+            </li> 
+            <li>
+                <%= link_to monitor_url do %> 
+                    <i class = "icon-eye-open"></i> remote monitor
+                <% end %>
+            </li>
             
             <% if signed_in? %>
                 <li id="fat-menu" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <%= current_user.name %> <b class="caret"></b>
+                        <i class="icon-user"></i> <%= current_user.name %> <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li><%= link_to "settings", "#" %></li> 

@@ -1,5 +1,8 @@
 $(document).ready(function() {
-
+    $("#snapshot_request").click( function() {
+        requestSingleSnapshot();
+        checkForNewSnapshot();
+    });
 });
      
     // time interval
@@ -40,9 +43,8 @@ $(document).ready(function() {
                     setTimeout( function() { getActivityData() }, 3000);  
                 }
             );
-        }
-        
-            }
+        }    
+    }
 
 
     /**
@@ -160,7 +162,6 @@ $(document).ready(function() {
     * @return
     */
     var getSnapshots = function( activityLogId ) {
-        $("#monitor_side_window").empty();
 
         $.get('/activity_logs/'+activityLogId+'.json', 
             function(data) {
@@ -188,11 +189,11 @@ $(document).ready(function() {
         }
     }
 
-    var openSnapshotsContainer = function(data) {
 
-        var container = $("#snapshots_container").id;
-        
-        if (container) {
+    var openSnapshotsContainer = function(data) {
+        var container = $("#snapshots_container");
+
+        if (container.length > 0) {
             $(container).empty();
             $("#snapshots_container_side_window").empty();
         }
@@ -204,26 +205,26 @@ $(document).ready(function() {
             jQuery('<div/>', {
                 id: 'snapshots_container_side_window'
             }).appendTo("#monitor_side_window");
+        }  
 
-            var closeButton = jQuery('<button/>', {
-                type: 'button',
-                class: 'btn btn-mini btn-info',
-                html: "x close window"
-            });
+        var closeButton = jQuery('<button/>', {
+            type: 'button',
+            class: 'btn btn-mini btn-info',
+            html: "x close window"
+        });
 
-            closeButton.appendTo("#snapshots_container_side_window");
-            closeButton.click( function() {
-                closeSnapshotsContainer();
-            });
+        closeButton.appendTo("#snapshots_container_side_window");
+        closeButton.click( function() {
+            closeSnapshotsContainer();
+        });
 
-            var createdAt = new Date(data.created_at);
-            var updatedAt = new Date(data.updated_at);
+        var createdAt = new Date(data.created_at);
+        var updatedAt = new Date(data.updated_at);
 
-            $("#snapshots_container_side_window").append("<br><br> begin: " + createdAt + "<br>");
-            $("#snapshots_container_side_window").append("end: " + updatedAt);
-        }
-                
+        $("#snapshots_container_side_window").append("<br><br> begin: " + createdAt + "<br>");
+        $("#snapshots_container_side_window").append("end: " + updatedAt);
     }
+
 
     var closeSnapshotsContainer = function() {
         var container = $("#snapshots_container");
@@ -260,15 +261,33 @@ $(document).ready(function() {
     var requestSingleSnapshot = function() {
         $.post('/snapshot/request.json', 
             function(data) {
-                console.log(data);
+                // console.log(data);
             }
         ); 
     }
 
+
    var grabSingleSnapshot = function() {
         $.get('/snapshot/grab.json', 
             function(data) {
-                console.log(data);
+                var img_data = data.img_data;
+                var img = new Image();
+
+                img.src = img_data;
+                
+                var imgDiv = $("#requested_snapshot");
+
+                if ( !$(imgDiv).id ) {
+                    imgDiv = jQuery('<div/>', {
+                        id: 'requested_snapshot',
+                        class: 'snapshot'
+                    });    
+                }
+                
+                imgDiv.html(img);
+                
+                $("#monitor_side_window").append( imgDiv );
+
             }
         ); 
     }
@@ -289,3 +308,5 @@ $(document).ready(function() {
 
     // launches monitor thread
     getActivityData();
+
+

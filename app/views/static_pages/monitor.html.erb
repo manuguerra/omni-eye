@@ -2,20 +2,27 @@
 
 <br>
 <center>
-    <p class = "muted">here you'll be able to monitor the activity of the remote camera</p> 
+
 
     <br><br>
-    
-    <div id = "monitor_main_window">
+   
+    <div id = "monitor_main_window">        
         <div id = "monitor_side_window">
+            <div id = "monitor_menu">
+                <a id = "snapshot_request" class = "btn" type = "button">
+                    <i class ="icon-camera"></i> request a snapshot
+                </a>
+            </div>
         </div>
-    </div>
-    <div id = "timeline_window">
-        <div id = "monitor_timeline"></div>
-    </div>
+        <div id = "timeline_window">
 
-    <div id = "snapshot_request">
-        request snapshot
+            <div class="alert alert-info" style = "position: absolute; z-index: 1000; margin: 5px ">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <strong>Activity timeline</strong> click on a cluster to see snapshots and get more info.
+           </div>            
+
+            <div id = "monitor_timeline"></div>
+        </div>
     </div>
     
 </center>
