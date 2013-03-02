@@ -7,5 +7,5 @@ The project is on the very beginning. At the moment, the activity monitor only i
 OmniEye includes a native HTML5 client app (Chrome only) that uses the webcam for activity detection, without the need of any software installation.
 A restful API, that is on the way, will allow other clients, running on different cameras and hardware, to connect to the service.
 
-A testing version is online at:  https://omnieye.herokuapp.com
+A test version is online at:  https://omnieye.herokuapp.com
 
