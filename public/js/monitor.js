@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+    var monitor = new Monitor();
+    monitor.init();
+
     $("#snapshot_request").click( function() {
 
         var imgDiv = $("#requested_snapshot");
@@ -14,23 +18,27 @@ $(document).ready(function() {
 
         imgDiv.appendTo("#monitor_side_window");
         
-        requestSingleSnapshot();
-        checkForNewSnapshot();
+        monitor.requestSingleSnapshot();
+        monitor.checkForNewSnapshot();
     });
-
-    // launches monitor thread
-    getActivityData();
-    checkCameraStatus();
 
 });
      
-    // time interval
-    var beginTime = -1;
-    var endTime = -1;
-    
-    var lastId = -1;    // last activity chunk received from the server
-    var chunkSize = 0;  // current acitivity chunk size
 
+
+function Monitor() {    
+    // time interval
+    this.beginTime = -1;
+    this.endTime = -1;
+    
+    this.lastId = -1;    // last activity chunk received from the server
+    this.chunkSize = 0;  // current acitivity chunk size
+    
+    this.init = function() {
+        // launches monitor thread
+        this.getActivityData();
+        this.checkCameraStatus();
+    }
 
     /**
     * main thread
@@ -39,15 +47,17 @@ $(document).ready(function() {
     * @param   
     * @return
     */
-    var getActivityData = function() {
+    this.getActivityData = function() {
         console.log("= = = = = = = = = =");
         console.log("fetching new data...");
         
-        if (beginTime < 0 || endTime < 0) {
+        var self = this;
+
+        if (this.beginTime < 0 || this.endTime < 0) {
             $.get('/activity_logs.json', 
                 function(data) {
-                    parseActivityData( data );
-                    setTimeout( function() { getActivityData() }, 3000);  
+                    self.parseActivityData( data );
+                    setTimeout( function() { self.getActivityData() }, 3000);  
                 }
             );
         }
@@ -58,8 +68,8 @@ $(document).ready(function() {
                     // end: endTime
                 },
                 function(data) {
-                    parseActivityData( data ); 
-                    setTimeout( function() { getActivityData() }, 2000);  
+                    self.parseActivityData( data ); 
+                    setTimeout( function() { self.getActivityData() }, 2000);  
                 }
             );
         }    
@@ -76,38 +86,36 @@ $(document).ready(function() {
     * @param data: ActivityLog json response from server
     * @return
     */
-    var parseActivityData = function( data ) {
-
-        if (data.length > 0) {
-            last_entry = data[data.length-1];
+    this.parseActivityData = function( data ) {
         
-            beginTime = last_entry.created_at;
-            endTime = last_entry.updated_at;
+        if (data.length > 0) {
+            var last_entry = data[data.length-1];
+        
+            this.beginTime = last_entry.created_at;
+            this.endTime = last_entry.updated_at;
         }
         
         for (var i = 0; i < data.length; i++) {
-            levels = data[i].level.split(" ");            
-            nLevels = levels.length;
+            var levels = data[i].level.split(" ");            
+            var nLevels = levels.length;
             
             // new activity chunk
-            if (data[i].id > lastId) {
+            if (data[i].id > this.lastId) {
                 
-                addActivityChunk(data[i].id);
-                lastId = data[i].id;
-                chunkSize = 0;
-                addSeparatorBar();
+                this.addActivityChunk(data[i].id);
+                this.lastId = data[i].id;
+                this.chunkSize = 0;
+                this.addSeparatorBar();
             }
 
-            if (data[i].id == lastId) {
-                for (var j = chunkSize; j < nLevels; j++) {
-                    addLevelBar(levels[j], 0, 0, 0, data[i].id);
-                    chunkSize
-                    chunkSize++;
+            if (data[i].id == this.lastId) {
+                for (var j = this.chunkSize; j < nLevels; j++) {
+                    this.addLevelBar(levels[j], 0, 0, 0, data[i].id);
+                    this.chunkSize++;
                 }
             }
         }
     }
-
 
     /**
     * add level bar
@@ -120,7 +128,10 @@ $(document).ready(function() {
     * @param beginTime:
     * @return
     */
-    var addLevelBar = function(level, beginTime, endTime, chunkSize, chunkId) {
+    this.addLevelBar = function(level, beginTime, endTime, chunkSize, chunkId) {
+        
+        //var level = args.level;
+
         var bar = jQuery('<div/>', {
             id: '',
             class: 'level_bar'
@@ -144,7 +155,7 @@ $(document).ready(function() {
     * @param 
     * @return
     */
-    var addSeparatorBar = function() {
+    this.addSeparatorBar = function() {
         var bar = jQuery('<div/>', {
             id: '',
             class: 'separator_bar',
@@ -159,7 +170,9 @@ $(document).ready(function() {
     * @param 
     * @return
     */
-    var addActivityChunk = function(chunkId) { 
+    this.addActivityChunk = function(chunkId) { 
+        
+        var self = this;
 
         var chunk = jQuery('<div/>', {
             id: 'chunk_'+chunkId,
@@ -167,7 +180,7 @@ $(document).ready(function() {
         }).prependTo('#monitor_timeline');        
 
         $(chunk).click( function() {
-            getSnapshots( chunkId );
+            self.getSnapshots( chunkId );
         });
     }
 
@@ -179,8 +192,10 @@ $(document).ready(function() {
     * @param   
     * @return
     */
-    var getSnapshots = function( activityLogId ) {
+    this.getSnapshots = function( activityLogId ) {
         
+        var self = this;
+
         var spinner = jQuery('<div/>', {
             class: 'spinner',
             html: "<img src = 'assets/loading_bar.gif'/>"
@@ -190,7 +205,7 @@ $(document).ready(function() {
         $.get('/activity_logs/'+activityLogId+'.json', 
             function(data) {
                 $(".spinner").remove();
-                showSnapshots( data );      
+                self.showSnapshots( data );      
             }
         );
     }
@@ -202,23 +217,25 @@ $(document).ready(function() {
     * @param  
     * @return
     */
-    var showSnapshots = function( data ) {           
+    this.showSnapshots = function( data ) {           
         
-        snapshots = data.snapshots
+        var snapshots = data.snapshots
 
-        openSnapshotsContainer(data.activity_log);
+        this.openSnapshotsContainer(data.activity_log);
 
         for (var i = 0; i < snapshots.length; i++) {
             var img_data = snapshots[i].img_data;
 
-            displayImage({
+            this.displayImage({
                 img_data: img_data, 
                 datetime: snapshots[i].updated_at 
             });
         }
     }
 
-    var openSnapshotsContainer = function(data) {
+    this.openSnapshotsContainer = function(data) {
+        var self = this;
+
         var container = $("#snapshots_container");
 
         if (container.length > 0) {
@@ -243,7 +260,7 @@ $(document).ready(function() {
 
         closeButton.appendTo("#snapshots_container_side_window");
         closeButton.click( function() {
-            closeSnapshotsContainer();
+            self.closeSnapshotsContainer();
         });
 
         var createdAt = new Date(data.created_at);
@@ -254,7 +271,7 @@ $(document).ready(function() {
     }
 
 
-    var closeSnapshotsContainer = function() {
+    this.closeSnapshotsContainer = function() {
         var container = $("#snapshots_container");
         
         if (container) {
@@ -272,7 +289,7 @@ $(document).ready(function() {
     }
 
 
-    var addDatetimeToDiv = function ( args ) {
+    this.addDatetimeToDiv = function ( args ) {
 
         var localDate = new Date( args.datetime );
         jQuery('<div/>', {
@@ -282,7 +299,7 @@ $(document).ready(function() {
     }
 
 
-    var displayImage = function( args ) {
+    this.displayImage = function( args ) {
 
         var img = new Image();
         img.src = args.img_data;
@@ -293,7 +310,7 @@ $(document).ready(function() {
         
         imgDiv.html(img);
         
-        addDatetimeToDiv({ 
+        this.addDatetimeToDiv({ 
             div: imgDiv,
             datetime: args.datetime
         });
@@ -302,7 +319,7 @@ $(document).ready(function() {
     }
 
     
-    var requestSingleSnapshot = function() {
+    this.requestSingleSnapshot = function() {
 
         $.post('/snapshot/request.json', 
             function(data) {
@@ -312,12 +329,11 @@ $(document).ready(function() {
     }
 
 
-   var grabSingleSnapshot = function() {
+   this.grabSingleSnapshot = function() {
         $.get('/snapshot/grab.json', 
             function(data) {
                 var img_data = data.img_data;
                 var img = new Image();
-
                 img.src = img_data;
                 
                 var imgDiv = $("#requested_snapshot");
@@ -334,44 +350,50 @@ $(document).ready(function() {
         ); 
     }
 
-    var checkForNewSnapshot = function() {
-         $.get('/snapshot/check.json', 
+    this.checkForNewSnapshot = function() {
+        var self = this;
+        $.get('/snapshot/check.json', 
             function(data) {
                 if (data.new) {
-                    setTimeout( checkForNewSnapshot, 1000 );
+                    setTimeout( function() { self.checkForNewSnapshot(); }, 1000 );
                 }
                 else {
-                    grabSingleSnapshot();
+                    self.grabSingleSnapshot();
                 }
             }
         );
     }
 
-    var checkCameraStatus = function() {
+    this.checkCameraStatus = function() {
+        
+        var self = this;
+        console.log("checking camera status...");
+
         $.get("/camera/status.json",
-                function( data ) {
-                    console.log(data);
-                    if (data.live) {
-                        $("#camera_status").html( "camera is online" );
-                        $("#camera_last_seen").html( "" );
-                        $("#camera_ip").html( "on ip: " + data.ip );
+            function( data ) {
+                
+                if (data.live) {
+                    $("#camera_status").html( "camera is online" );
+                    $("#camera_last_seen").html( "" );
+                    $("#camera_ip").html( "on ip: " + data.ip );
 
-                        if ( !$("#snapshot_request").is(":visible") ) {
-                             $("#snapshot_request").fadeIn();
-                        }
+                    if ( !$("#snapshot_request").is(":visible") ) {
+                         $("#snapshot_request").fadeIn();
                     }
-                    else {
-                        $("#camera_status").html( "camera is offline" );
-                        var date = new Date( data.last_seen );
-                        $("#camera_last_seen").html( "last seen: " + date );
-                        $("#camera_ip").html( "on ip: " + data.ip );
-
-                        if ( $("#snapshot_request").is(":visible") ) {
-                             $("#snapshot_request").fadeOut();
-                        }                    
-                    }
-
-                    setTimeout( checkCameraStatus, 5000 );
                 }
+                else {
+                    $("#camera_status").html( "camera is offline" );
+                    var date = new Date( data.last_seen );
+                    $("#camera_last_seen").html( "last seen: " + date );
+                    $("#camera_ip").html( "on ip: " + data.ip );
+
+                    if ( $("#snapshot_request").is(":visible") ) {
+                         $("#snapshot_request").fadeOut();
+                    }                    
+                }
+                
+                setTimeout( function() { self.checkCameraStatus(); }, 5000 );
+            }
         );
     }
+}
