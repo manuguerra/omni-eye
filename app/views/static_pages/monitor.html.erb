@@ -1,4 +1,36 @@
- <script src="/js/monitor.js" type="text/javascript"></script>
+<script src="/js/monitor.js" type="text/javascript"></script>
+<script src="/js/timeline.js" type="text/javascript"></script>
+
+<script> 
+    $(document).ready(function() {
+
+    var timeline = new Timeline();
+    timeline.init();
+    
+    var remoteCamera = new RemoteCamera();
+    remoteCamera.init();
+    
+    $("#snapshot_request").click( function() {
+
+        var imgDiv = $("#requested_snapshot");
+
+        if ( imgDiv.length == 0 ) {
+            imgDiv = jQuery('<div/>', {
+                id: 'requested_snapshot',
+                class: 'snapshot'
+            });    
+        }
+        
+        imgDiv.html("<img src = '/assets/spinner.gif'/>");
+
+        imgDiv.appendTo("#monitor_side_window");
+        
+        remoteCamera.requestSingleSnapshot();
+        remoteCamera.checkForNewSnapshot();
+    });
+
+});
+</script>
 
 <br>
 <center>
@@ -26,8 +58,9 @@
               <strong>Activity timeline</strong> click on a cluster to see snapshots and get more info.
            </div>            
 
-            <div id = "monitor_timeline"></div>
-        </div>
+           <div id = "monitor_timeline"></div>
+       </div>
+       
     </div>
     
 </center>
