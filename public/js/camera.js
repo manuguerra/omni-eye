@@ -1,96 +1,114 @@
-$(document).ready(function() {
+function Camera() {
+    
+    this.thresholdVal = 30;
+    this.activityThreshold = 0.1;
 
-    window.navigator.webkitGetUserMedia( {video:true},
-            function(stream) {
-                video.src = webkitURL.createObjectURL(stream);
-            },
-            function(err) {
-                console.log("Unable to get video stream!")
-            }
-    )
+    this.video = null;
+    this.canvas = null;
+    this.diffCanvas = null;
 
-    var thresholdVal = 30;
-    var activityThreshold = 0.1;
+    this.ctx = "";
+    this.diffImageCtx = "";
 
-    var video = $("#live").get()[0];
-    var canvas = $("#canvas");
-    var diffCanvas = $("#diff_canvas");
+    this.pixArray = [];
 
-    var ctx = canvas.get()[0].getContext('2d');
-    var diffImageCtx = diffCanvas.get()[0].getContext('2d');
+    this.pixFlow = 0;
 
-    var pixArray = [];
+    this.lastPosted = 0;
 
-    var pixFlow = 0;
+    this.verbose = true;
 
-    var lastPosted = 0;
+    this.init = function() {
+        var self = this;
 
-    function setThreshold() {
-        thresholdVal = $("#threshold").slider("value");       
+        this.setupGui();
+        this.getCamera(); 
+        this.updateCameraStatus();
+        this.checkForNewSnapshotRequest();
+        setInterval( function() { self.main(); }, 50 );
     }
 
-    $( "#threshold" ).slider({
-        value: thresholdVal,
-        orientation: "horizontal",
-        max: 150,
-        range: "min",
-        animate: true,
-        slide: setThreshold,
-        change: setThreshold        
-    });
+    this.main = function() {
+        var prevFrame = this.ctx.getImageData(0,0, 320,240);
+        this.ctx.drawImage( this.video, 0, 0, 320, 240);
+        var currFrame = this.ctx.getImageData(0,0, 320,240);
+
+        var grayScaleFrame = toGrayscale(currFrame);
+        var diffImage = imgDiff(prevFrame, currFrame);
+        var diffMask = threshold(diffImage, this.thresholdVal);
+        var erodeMask = erode(diffMask, 1);
+
+        this.ctx.putImageData(grayScaleFrame, 0,0);
+        this.diffImageCtx.putImageData(erodeMask, 0,0);
+
+        var activity = countPixels(erodeMask);
+
+        this.pixFlow = this.pixFlow + ( activity - this.pixFlow )/2.0;
+        var c = this.pixFlow/(32.0 * 24.0);
+        this.activityAlert(c);
+        
+        c = c + "%";
+        $("#activ_bar").css("width", c);      
+    }
 
 
-    function activityAlert( activity ) {
+    this.activityAlert = function( activity ) {
 
-        if (activity > activityThreshold) {
+        if (activity > this.activityThreshold) {
             $("#alert").show();
             var now = new Date();
-            postActivity( activity, now );
+            this.postActivity({ 
+                level:activity, 
+                datetime:now 
+            });
         }
         else {
             $("#alert").hide();
         }
     }
 
-    /**
-    * main thread
-    * grabs frame and outputs it to the image processing pipeline
-    * sleeps for 50 msec after each iteration
-    *
-    * @namespace 
-    * @method main
-    * @param   
-    * @return
-    */  
-    var main = setInterval(
-            function () {
-            
-                var prevFrame = ctx.getImageData(0,0, 320,240);
-                ctx.drawImage(video, 0, 0, 320, 240);
-                var currFrame = ctx.getImageData(0,0, 320,240);
+    
+    this.setupGui = function() {
+        var self = this;
 
-                var grayScaleFrame = toGrayscale(currFrame);
-                var diffImage = imgDiff(prevFrame, currFrame);
-                var diffMask = threshold(diffImage, thresholdVal);
-                var erodeMask = erode(diffMask, 1);
+        this.video = $("#live").get()[0];
+        this.canvas = $("#canvas");
+        this.diffCanvas = $("#diff_canvas");
+        this.ctx = this.canvas.get()[0].getContext('2d');
+        this.diffImageCtx = this.diffCanvas.get()[0].getContext('2d');
 
-                ctx.putImageData(grayScaleFrame, 0,0);
-                diffImageCtx.putImageData(erodeMask, 0,0);
+        $( "#threshold" ).slider({
+            value: this.thresholdVal,
+            orientation: "horizontal",
+            max: 150,
+            range: "min",
+            animate: true,
+            slide: function() { self.setThreshold() },
+            change: function() { self.setThreshold() }        
+        });
+    }
 
-                var activity = countPixels(erodeMask);
+    this.getCamera = function() {
+        var self = this;
 
-                pixFlow = pixFlow + ( activity - pixFlow )/2.0;
-                var c = pixFlow/(32.0 * 24.0);
-                activityAlert(c);
-                
-                c = c + "%";
-                $("#activ_bar").css("width", c);
-            },          
-            50
-    );
+        window.navigator.webkitGetUserMedia( {video:true},
+            function(stream) {
+                self.video.src = webkitURL.createObjectURL(stream);
+            },
+            function(err) {
+                if (self.verbose) {
+                    console.log("Unable to get video stream!");
+                }
+            }
+        );
+    }
+    
+   this.setThreshold = function() {
+        this.thresholdVal = $("#threshold").slider("value");       
+    }
 
 
-    /**
+  /**
     * postActivity
     * posts activity level and datetime using ajax
     *
@@ -99,82 +117,95 @@ $(document).ready(function() {
     * @param {ImageData}    img: input image
     * @return {int}         non zero pixels count
     */  
-    var postActivity = function( level, datetime ) {
+    this.postActivity = function( args ) {
+        var self = this;
+
+        var level = args.level;
+        var datetime = args.datetime;
+
         var date = new Date();
         var time = date.getTime();
         
-        if (time - lastPosted < 800) {
+        if (time - this.lastPosted < 800) {
             return;
         }
-        lastPosted = time;
+        
+        this.lastPosted = time;
+        
+        var img = this.captureImage();
 
         $.post('/activity_logs.json', 
             {
                 level:      level,
                 datetime:   datetime,
-                image:      capture_image()
-            },
-            "json"
+                image:      img
+            }
         );
     }
 
-    var updateCameraStatus = function() {
-         $.post('/camera/status.json', {},
-                 function( data ) {
-                     setTimeout( updateCameraStatus, 1000 );
-                 }
+    this.updateCameraStatus = function() {
+        var self = this;
+
+        if ( self.verbose ) {
+            console.log ("updating status...");
+        }
+
+        $.post('/camera/status.json', {},
+             function( data ) {
+                 setTimeout( function(){ self.updateCameraStatus(); }, 1000 );
+             }
         );
     }
 
-    var capture_image = function() {
-        var canvas = document.getElementById('canvas')
-        var context = canvas.getContext("2d");
-        var img     = canvas.toDataURL("image/jpeg", 0.5);
+    this.captureImage = function() {
+        var img = this.canvas[0].toDataURL("image/jpeg", 0.5);
 
-        return img
+        return img;
     }
-
     
-    var display_image = function( img_data ) {
-        var img = new Image();
-        img.src = img_data;
-        $("body").append( img );
-    }
 
-    
-    var checkForNewSnapshotRequest = function() {
-         console.log("checking for new snapshot request...");
+    this.checkForNewSnapshotRequest = function() {
+        var self = this;
+
+        if (this.verbose) {
+            console.log("checking for new snapshot request...");
+        }
  
         $.get('/snapshot/check.json', 
             function(data) {
-                console.log (data);
                 if (data.new) {
-                    console.log("new snapshot requested");
-                    uploadSnapshot();
+                    if (self.verbose) {
+                        console.log("new snapshot requested");
+                    }
+                    self.uploadSnapshot();
                 }
                 else {
                   
                 }
-                setTimeout( checkForNewSnapshotRequest, 1000 ); 
+                setTimeout( function() { self.checkForNewSnapshotRequest(); }, 1000 ); 
             }
         );
-    }
+    }    
 
-    var uploadSnapshot = function() {
-        console.log("uploading snapshot...");
+
+    this.uploadSnapshot = function() {
+        var self = this;
+
+        if (self.verbose) {
+            console.log("uploading snapshot...");
+        }
+        var img = this.captureImage();
+
         $.post('/snapshot/upload.json', 
             {
-                image:  capture_image()
+                image:  img
             },
             function(data) {
-                console.log("snapshot uploaded");
+                if (self.verbose) {
+                    console.log("snapshot uploaded");
+                }
             }
         );
     }
-
-    checkForNewSnapshotRequest();
-    updateCameraStatus();
-
-});
-
-
+    
+}

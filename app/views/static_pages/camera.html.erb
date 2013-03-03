@@ -1,5 +1,13 @@
- <script src="/js/image_utils.js" type="text/javascript"></script>
- <script src="/js/camera.js" type="text/javascript"></script>
+<script src="/js/image_utils.js" type="text/javascript"></script>
+<script src="/js/camera.js" type="text/javascript"></script>
+
+<script>
+    var camera = new Camera();
+
+    $(document).ready(function() {
+        camera.init();    
+    });
+</script>
 
 <div>
     <video id="live" width="320" height="240" autoplay style="display: none;"></video>
