@@ -23,24 +23,32 @@ class ActivityLogsController < ApplicationController
         # -- TEMPORARY --
         # for now, the app is only working with a single camera per user
         @activity_logs = current_user.default_camera.activity_logs
-
-        # default interval is 1 hour
-        if !@begin or !@begin.to_datetime
-            @begin = @activity_logs.last.updated_at - 1.hour
-        end
-        if !@end or !@end.to_datetime
-            @end = @activity_logs.last.updated_at
-        end
-
-        @selected_activities = @activity_logs.find (
-            :all, 
-            :conditions => ['updated_at >= ? and created_at <= ?', @begin.to_datetime, @end.to_datetime ]
-        )
         
-        respond_to do |f|
-            f.json {
-                render :json => @selected_activities.to_json
-            }
+        if @activity_logs.length == 0 
+            respond_to do |f|
+                f.json {
+                    render :json => { }
+                }
+            end
+        else
+            # default interval is 1 hour
+            if !@begin or !@begin.to_datetime
+                @begin = @activity_logs.last.updated_at - 1.hour
+            end
+            if !@end or !@end.to_datetime
+                @end = @activity_logs.last.updated_at
+            end
+
+            @selected_activities = @activity_logs.find (
+                :all, 
+                :conditions => ['updated_at >= ? and created_at <= ?', @begin.to_datetime, @end.to_datetime ]
+            )
+            
+            respond_to do |f|
+                f.json {
+                    render :json => @selected_activities.to_json
+                }
+            end
         end
     end
     
