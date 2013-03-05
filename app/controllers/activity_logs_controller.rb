@@ -34,16 +34,19 @@ class ActivityLogsController < ApplicationController
             # default interval is 1 hour
             if !@begin or !@begin.to_datetime
                 @begin = @activity_logs.last.updated_at - 1.hour
+                puts "_*_*_*_*__*_*_*_*_*_"
+                puts @begin.to_datetime
+
             end
             if !@end or !@end.to_datetime
-                @end = @activity_logs.last.updated_at
+                @end = @activity_logs.last.updated_at + 1.hour
+                puts "_*_*_*_*__*_*_*_*_*_"
+                puts @end.to_datetime
+
             end
 
-            @selected_activities = @activity_logs.find (
-                :all, 
-                :conditions => ['updated_at >= ? and created_at <= ?', @begin.to_datetime, @end.to_datetime ]
-            )
-            
+            @selected_activities = @activity_logs.where(:updated_at => @begin.to_datetime..@end.to_datetime)
+
             respond_to do |f|
                 f.json {
                     render :json => @selected_activities.to_json
