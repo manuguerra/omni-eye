@@ -109,9 +109,23 @@
   
     <li><a href="./Camera.html">Camera</a>
   
+    <li><a href="./CameraStatus.html">CameraStatus</a>
+  
+    <li><a href="./CameraStatusesController.html">CameraStatusesController</a>
+  
+    <li><a href="./CameraStatusesHelper.html">CameraStatusesHelper</a>
+  
     <li><a href="./SessionsController.html">SessionsController</a>
   
     <li><a href="./SessionsHelper.html">SessionsHelper</a>
+  
+    <li><a href="./Snapshot.html">Snapshot</a>
+  
+    <li><a href="./SnapshotRequest.html">SnapshotRequest</a>
+  
+    <li><a href="./SnapshotRequestsController.html">SnapshotRequestsController</a>
+  
+    <li><a href="./SnapshotRequestsHelper.html">SnapshotRequestsHelper</a>
   
     <li><a href="./StaticPagesController.html">StaticPagesController</a>
   
@@ -161,19 +175,24 @@
 
         <div class="method-description">
           
-          <p>Creates new session</p>
-<ul><li>
-<p><strong>Args</strong>    :</p>
-</li><li>
-<p><strong>Returns</strong> :</p>
-</li><li>
-<p><strong>Raises</strong> :</p>
-</li></ul>
+          <p>create</p>
+
+<p>creates new session if user is sucessful authenticated redirects to login
+page otherwise</p>
+
+<h4 id="method-i-create-label-Params+%28POST%29">Params (POST)</h4>
+
+<pre>+:session :email+ - user email
++:password :password+ - user password</pre>
+
+<h4 id="method-i-create-label-Reponse">Reponse</h4>
+
+<pre>+json+</pre>
           
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 32</span>
+            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
     <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_email</span>( <span class="ruby-identifier">params</span>[<span class="ruby-value">:session</span>][<span class="ruby-value">:email</span>].<span class="ruby-identifier">downcase</span> )
 
@@ -208,19 +227,14 @@
 
         <div class="method-description">
           
-          <p>Destroys session and redirects to root url</p>
-<ul><li>
-<p><strong>Args</strong>    :</p>
-</li><li>
-<p><strong>Returns</strong> :</p>
-</li><li>
-<p><strong>Raises</strong> :</p>
-</li></ul>
+          <p>destroy</p>
+
+<p>Destroys session and redirects to root url</p>
           
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 20</span>
+            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
     <span class="ruby-identifier">sign_out</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_url</span>
@@ -246,19 +260,14 @@
 
         <div class="method-description">
           
-          <p>Renders login window/screen</p>
-<ul><li>
-<p><strong>Args</strong>    :</p>
-</li><li>
-<p><strong>Returns</strong> :</p>
-</li><li>
-<p><strong>Raises</strong> :</p>
-</li></ul>
+          <p>new</p>
+
+<p>Renders login window/screen</p>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 10</span>
+            <pre><span class="ruby-comment"># File app/controllers/sessions_controller.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->

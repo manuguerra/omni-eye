@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+<title>class SnapshotRequestsController - Rails Application Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/snapshot_requests_controller.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-checkNewRequest">#checkNewRequest</a>
+    
+    <li><a href="#method-i-grabSnapshot">#grabSnapshot</a>
+    
+    <li><a href="#method-i-requestSnapshot">#requestSnapshot</a>
+    
+    <li><a href="#method-i-takeSnapshot">#takeSnapshot</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./ActivityLog.html">ActivityLog</a>
+  
+    <li><a href="./ActivityLogsController.html">ActivityLogsController</a>
+  
+    <li><a href="./ActivityLogsHelper.html">ActivityLogsHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./Camera.html">Camera</a>
+  
+    <li><a href="./CameraStatus.html">CameraStatus</a>
+  
+    <li><a href="./CameraStatusesController.html">CameraStatusesController</a>
+  
+    <li><a href="./CameraStatusesHelper.html">CameraStatusesHelper</a>
+  
+    <li><a href="./SessionsController.html">SessionsController</a>
+  
+    <li><a href="./SessionsHelper.html">SessionsHelper</a>
+  
+    <li><a href="./Snapshot.html">Snapshot</a>
+  
+    <li><a href="./SnapshotRequest.html">SnapshotRequest</a>
+  
+    <li><a href="./SnapshotRequestsController.html">SnapshotRequestsController</a>
+  
+    <li><a href="./SnapshotRequestsHelper.html">SnapshotRequestsHelper</a>
+  
+    <li><a href="./StaticPagesController.html">StaticPagesController</a>
+  
+    <li><a href="./StaticPagesHelper.html">StaticPagesHelper</a>
+  
+    <li><a href="./User.html">User</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class SnapshotRequestsController</h1>
+
+  <div id="description" class="description">
+    
+<p>Copyright © 2013 Manuel Guerra <a
+href="http://macroscopio.com">macroscopio.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+“Software”), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the
+following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.</p>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-checkNewRequest" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">checkNewRequest</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>checkSnasphotRequest</p>
+
+<p>returns { :new =&gt; true } if new monitor client requested new snapshot</p>
+
+<h4 id="method-i-checkNewRequest-label-Reponse">Reponse</h4>
+
+<pre>+json+</pre>
+          
+
+          
+          <div class="method-source-code" id="checkNewRequest-source">
+            <pre><span class="ruby-comment"># File app/controllers/snapshot_requests_controller.rb, line 77</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">checkNewRequest</span>
+    <span class="ruby-ivar">@new_request</span> = <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">requested_at</span> <span class="ruby-operator">-</span> (<span class="ruby-ivar">@request</span>.<span class="ruby-identifier">taken_at</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">requested_at</span>) <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
+
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
+            <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:new</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@new_request</span> } 
+        }
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- checkNewRequest-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- checkNewRequest-method -->
+
+    
+      <div id="method-i-grabSnapshot" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">grabSnapshot</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>grab<a href="Snapshot.html">Snapshot</a></p>
+
+<p>returns jpeg stream and datetime of a requested snasphot</p>
+
+<h4 id="method-i-grabSnapshot-label-Reponse">Reponse</h4>
+
+<pre>+json+ { :img_data, :taken_at }</pre>
+          
+
+          
+          <div class="method-source-code" id="grabSnapshot-source">
+            <pre><span class="ruby-comment"># File app/controllers/snapshot_requests_controller.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">grabSnapshot</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
+            <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:img_data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">img_data</span>, <span class="ruby-value">:taken_at</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">taken_at</span> } 
+        }
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- grabSnapshot-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- grabSnapshot-method -->
+
+    
+      <div id="method-i-requestSnapshot" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">requestSnapshot</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>requestSnashot</p>
+
+<p>request a new snapshot for the camera client</p>
+
+<h4 id="method-i-requestSnapshot-label-Reponse">Reponse</h4>
+
+<pre>+json+ {:success, :errors}</pre>
+          
+
+          
+          <div class="method-source-code" id="requestSnapshot-source">
+            <pre><span class="ruby-comment"># File app/controllers/snapshot_requests_controller.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">requestSnapshot</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+        
+        <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">requested_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>    
+        
+        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">save</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
+                <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:success</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> } 
+            }
+        <span class="ruby-keyword">else</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
+                <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:success</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>, <span class="ruby-value">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">as_json</span> }
+            }
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- requestSnapshot-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- requestSnapshot-method -->
+
+    
+      <div id="method-i-takeSnapshot" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">takeSnapshot</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>takeSnasphot</p>
+
+<p>uploads snapshot</p>
+
+<h4 id="method-i-takeSnapshot-label-Params+%28POST%29">Params (POST)</h4>
+
+<p><code>:image</code> - jpeg data stream</p>
+
+<h4 id="method-i-takeSnapshot-label-Reponse">Reponse</h4>
+
+<pre>+json+ - { :success, :errors }</pre>
+          
+
+          
+          <div class="method-source-code" id="takeSnapshot-source">
+            <pre><span class="ruby-comment"># File app/controllers/snapshot_requests_controller.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">takeSnapshot</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+        
+        <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">img_data</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:image</span>]
+        <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">taken_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+
+        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">save</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
+                <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:success</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> } 
+            }
+        <span class="ruby-keyword">else</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
+                <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:success</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>, <span class="ruby-value">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@request</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">as_json</span> }
+            }
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- takeSnapshot-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- takeSnapshot-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.1.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

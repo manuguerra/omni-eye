@@ -109,9 +109,23 @@
   
     <li><a href="./Camera.html">Camera</a>
   
+    <li><a href="./CameraStatus.html">CameraStatus</a>
+  
+    <li><a href="./CameraStatusesController.html">CameraStatusesController</a>
+  
+    <li><a href="./CameraStatusesHelper.html">CameraStatusesHelper</a>
+  
     <li><a href="./SessionsController.html">SessionsController</a>
   
     <li><a href="./SessionsHelper.html">SessionsHelper</a>
+  
+    <li><a href="./Snapshot.html">Snapshot</a>
+  
+    <li><a href="./SnapshotRequest.html">SnapshotRequest</a>
+  
+    <li><a href="./SnapshotRequestsController.html">SnapshotRequestsController</a>
+  
+    <li><a href="./SnapshotRequestsHelper.html">SnapshotRequestsHelper</a>
   
     <li><a href="./StaticPagesController.html">StaticPagesController</a>
   
@@ -130,6 +144,28 @@
 
   <div id="description" class="description">
     
+<p>Copyright © 2013 Manuel Guerra <a
+href="http://macroscopio.com">macroscopio.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+“Software”), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the
+following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.</p>
+
   </div><!-- description -->
 
   
@@ -178,23 +214,31 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/activity_logs_controller.rb, line 64</span>
+            <pre><span class="ruby-comment"># File app/controllers/activity_logs_controller.rb, line 99</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
         
-        <span class="ruby-ivar">@level</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:level</span>].<span class="ruby-identifier">to_f</span>
+        <span class="ruby-comment"># formats decimal digits on level</span>
+        <span class="ruby-ivar">@level</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:level</span>].<span class="ruby-identifier">to_f</span>.<span class="ruby-identifier">to_s</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">5</span>]
         
-        <span class="ruby-comment"># the activities are clustered in one row of the db, unless they are far apart,</span>
+        <span class="ruby-comment"># the activities are clustered in a string, stored in a single row of the db, unless they are far apart,</span>
         <span class="ruby-comment"># in which case a new row is created</span>
         <span class="ruby-comment"># the interval is determined by INTERVAL_BETWEEN_ACTIVITY_CHUNKS</span>
         <span class="ruby-comment"># see config/application.rb</span>
         <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@last_log</span> <span class="ruby-keyword">or</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@last_log</span>.<span class="ruby-identifier">updated_at</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">OmniEye</span><span class="ruby-operator">::</span><span class="ruby-constant">INTERVAL_BETWEEN_ACTIVITY_CHUNKS</span>
-            <span class="ruby-ivar">@activity_log</span> = <span class="ruby-ivar">@camera</span>.<span class="ruby-identifier">activity_logs</span>.<span class="ruby-identifier">build</span>( <span class="ruby-value">:level</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@level</span>.<span class="ruby-identifier">to_s</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">5</span>], <span class="ruby-value">:datetime</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:datetime</span>] )
+            <span class="ruby-ivar">@activity_log</span> = <span class="ruby-ivar">@camera</span>.<span class="ruby-identifier">activity_logs</span>.<span class="ruby-identifier">build</span>( <span class="ruby-value">:level</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@level</span>, <span class="ruby-value">:datetime</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:datetime</span>] )
         <span class="ruby-keyword">else</span>
             <span class="ruby-ivar">@activity_log</span> = <span class="ruby-ivar">@last_log</span>
-            <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">level</span> = <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">level</span> <span class="ruby-operator">+</span> <span class="ruby-string">' '</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@level</span>.<span class="ruby-identifier">to_s</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">5</span>]
+            <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">level</span> = <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">level</span> <span class="ruby-operator">+</span> <span class="ruby-string">' '</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@level</span>
         <span class="ruby-keyword">end</span>
 
+        <span class="ruby-comment"># uploads snapshot if the interval since the last upload is greater than INTERVAL_BETWEEN_SNAPSHOTS</span>
+        <span class="ruby-comment"># see config/application.rb</span>
+        <span class="ruby-ivar">@last_snapshot</span> = <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">snapshots</span>.<span class="ruby-identifier">last</span>
+        <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-ivar">@last_snapshot</span> <span class="ruby-keyword">or</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@last_snapshot</span>.<span class="ruby-identifier">created_at</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">OmniEye</span><span class="ruby-operator">::</span><span class="ruby-constant">INTERVAL_BETWEEN_SNAPSHOTS</span>) 
+           <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">snapshots</span>.<span class="ruby-identifier">build</span>( <span class="ruby-value">:img_data</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:image</span>] )              
+        <span class="ruby-keyword">end</span>
+        
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">save</span>
                 <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> { 
                     <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { <span class="ruby-value">:success</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> } 
@@ -233,8 +277,8 @@
 
 <h4 id="method-i-index-label-Params+%28GET%29">Params (GET)</h4>
 
-<pre>+:begin+ - begin datetime
-+:end+ - end datetime</pre>
+<pre>+:begin+ - begin datetime string
++:end+ - end datetime string</pre>
 
 <h4 id="method-i-index-label-Reponse">Reponse</h4>
 
@@ -243,33 +287,38 @@
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/activity_logs_controller.rb, line 18</span>
+            <pre><span class="ruby-comment"># File app/controllers/activity_logs_controller.rb, line 30</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span> 
     <span class="ruby-comment"># search interval</span>
     <span class="ruby-ivar">@begin</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:begin</span>]
     <span class="ruby-ivar">@end</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:end</span>]
     
-    <span class="ruby-comment"># TEMPORARY</span>
+    <span class="ruby-comment"># -- TEMPORARY --</span>
     <span class="ruby-comment"># for now, the app is only working with a single camera per user</span>
     <span class="ruby-ivar">@activity_logs</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">default_camera</span>.<span class="ruby-identifier">activity_logs</span>
-
-    <span class="ruby-comment"># default interval is 1 hour</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@begin</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@begin</span>.<span class="ruby-identifier">to_datetime</span>
-        <span class="ruby-ivar">@begin</span> = <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">created_at</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">hour</span>
-    <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@end</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@end</span>.<span class="ruby-identifier">to_datetime</span>
-        <span class="ruby-ivar">@end</span> = <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">created_at</span>
-    <span class="ruby-keyword">end</span>
-
-    <span class="ruby-ivar">@selected_activities</span> = <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">find</span> (
-        <span class="ruby-value">:all</span>, 
-        <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">'created_at &gt;= ? and created_at &lt;= ?'</span>, <span class="ruby-ivar">@begin</span>.<span class="ruby-identifier">to_datetime</span>, <span class="ruby-ivar">@end</span>.<span class="ruby-identifier">to_datetime</span> ]
-    )
     
-    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
-        <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> {
-            <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@selected_activities</span>.<span class="ruby-identifier">to_json</span>
-        }
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> 
+        <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> {
+                <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { }
+            }
+        <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+        <span class="ruby-comment"># default interval is 1 hour</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@begin</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@begin</span>.<span class="ruby-identifier">to_datetime</span>
+            <span class="ruby-ivar">@begin</span> = <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">updated_at</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">hour</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@end</span> <span class="ruby-keyword">or</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@end</span>.<span class="ruby-identifier">to_datetime</span>
+            <span class="ruby-ivar">@end</span> = <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">updated_at</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">hour</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-ivar">@selected_activities</span> = <span class="ruby-ivar">@activity_logs</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:updated_at</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@begin</span>.<span class="ruby-identifier">to_datetime</span><span class="ruby-operator">..</span><span class="ruby-ivar">@end</span>.<span class="ruby-identifier">to_datetime</span>)
+
+        <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> {
+                <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@selected_activities</span>.<span class="ruby-identifier">to_json</span>
+            }
+        <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- index-source -->
@@ -294,12 +343,30 @@
         <div class="method-description">
           
           <p>show</p>
+
+<p>renders <a href="ActivityLog.html">ActivityLog</a> levels and snapshots</p>
+
+<h4 id="method-i-show-label-Params+%28GET%29">Params (GET)</h4>
+
+<pre>+:id+ - ActivityLog id</pre>
+
+<h4 id="method-i-show-label-Reponse">Reponse</h4>
+
+<pre>+json+</pre>
           
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/activity_logs_controller.rb, line 49</span>
+            <pre><span class="ruby-comment"># File app/controllers/activity_logs_controller.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> 
+        <span class="ruby-identifier">f</span>.<span class="ruby-identifier">json</span> {
+            <span class="ruby-identifier">render</span> <span class="ruby-value">:json</span> =<span class="ruby-operator">&gt;</span> { 
+                <span class="ruby-value">:activity_log</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@activity_log</span>,
+                <span class="ruby-value">:snapshots</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@activity_log</span>.<span class="ruby-identifier">snapshots</span>
+            }
+        }
+    <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
           

@@ -1,3 +1,15 @@
+#
+# Copyright (c) 2013 Manuel Guerra
+# http://macroscopio.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+
+
 class ActivityLogsController < ApplicationController
     
     before_filter   :signed_in_user
@@ -48,6 +60,7 @@ class ActivityLogsController < ApplicationController
             end
         end
     end
+
     
     # show
     #
@@ -121,23 +134,26 @@ class ActivityLogsController < ApplicationController
 
 
     private 
-        # uploads snapshot
-        def upload_snapshot
-        end
         
+        # correct_user
+        #
         # grants access only to the owner of the log
+        #      
         def correct_user
             @activity_log = ActivityLog.find params[:id]
             @user = @activity_log.camera.user
             redirect_to root_url unless current_user?(@user)
         end
         
+
+        # filter_excessive_posts
+        #        
         # sets a min interval between posts
         # the interval is determined by INTERVAL_BETWEEN_ACTIVITY_UPDATES
         # see config/application.rb
         def filter_excessive_posts
 
-            # TEMPORARY
+            # -- TEMPORARY --
             # for now, the app is only working with a single camera per user
             # in future versions, get the camera as a parameter
             @camera = current_user.default_camera

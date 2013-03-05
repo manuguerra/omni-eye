@@ -8,4 +8,3 @@ OmniEye includes a native HTML5 client app (Chrome only) that uses the webcam fo
 A restful API, that is on the way, will allow other clients, running on different cameras and hardware, to connect to the service.
 
 A test version is online at:  https://omnieye.herokuapp.com
-

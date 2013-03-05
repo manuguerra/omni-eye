@@ -1,21 +1,16 @@
 class SessionsController < ApplicationController
 
-
-    # Renders login window/screen 
+    # new
     #
-    # * *Args*    :
-    # * *Returns* :
-    # * *Raises* :
-    #     
+    # Renders login window/screen     
+    #    
     def new
     end
 
 
-    # Destroys session and redirects to root url 
+    # destroy
     #
-    # * *Args*    :
-    # * *Returns* :
-    # * *Raises* :
+    # Destroys session and redirects to root url
     # 
     def destroy
         sign_out
@@ -23,12 +18,18 @@ class SessionsController < ApplicationController
     end
 
 
-    # Creates new session
+    # create
     #
-    # * *Args*    :
-    # * *Returns* :
-    # * *Raises* :
-    # 
+    # creates new session if user is sucessful authenticated
+    # redirects to login page otherwise
+    #
+    # ==== Params (POST)
+    #   +:session :email+ - user email
+    #   +:password :password+ - user password
+    #
+    # ==== Reponse
+    #   +json+
+    #    
     def create
         user = User.find_by_email( params[:session][:email].downcase )
 
