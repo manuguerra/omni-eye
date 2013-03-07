@@ -52,8 +52,7 @@ class ActivityLogsController < ApplicationController
                 @end = Time.now + 1.hour
             end
 
-            @selected_activities = @activity_logs.where(:updated_at => @begin.to_datetime..@end.to_datetime)
-
+            @selected_activities = @activity_logs.where(:updated_at => @begin.to_datetime..@end.to_datetime ).order("id ASC")
             respond_to do |f|
                 f.json {
                     render :json => @selected_activities.to_json
@@ -78,7 +77,7 @@ class ActivityLogsController < ApplicationController
             f.json {
                 render :json => { 
                     :activity_log => @activity_log,
-                    :snapshots => @activity_log.snapshots
+                    :snapshots => @activity_log.snapshots.order("id ASC")
                 }
             }
         end
