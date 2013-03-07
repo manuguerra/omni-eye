@@ -26,5 +26,7 @@ OmniEye::Application.routes.draw do
     #camera_status
     match '/camera/status', :to => 'camera_statuses#show',      :via => [:get]
     match '/camera/status', :to => 'camera_statuses#update',    :via => [:post]
-
+    
+    #js unit tests - development env only
+    match '/tests', :to => 'static_pages#tests' if Rails.env == 'development'
 end
