@@ -114,7 +114,7 @@ function Camera() {
     this.activityAlert = function( activity ) {
 
         if (activity > this.activityThreshold) {
-            $("#alert").show();
+            $("#alert_bar").show();
             var now = new Date();
             this.postActivity({ 
                 level:activity, 
@@ -122,7 +122,7 @@ function Camera() {
             });
         }
         else {
-            $("#alert").hide();
+            $("#alert_bar").hide();
         }
     }
 
@@ -144,13 +144,23 @@ function Camera() {
         this.diffImageCtx = this.diffCanvas.get()[0].getContext('2d');
 
         $( "#threshold" ).slider({
-            value: this.thresholdVal,
+            value: self.thresholdVal,
             orientation: "horizontal",
             max: 150,
             range: "min",
             animate: true,
             slide: function() { self.setThreshold() },
             change: function() { self.setThreshold() }        
+        });
+
+        $( "#activity_threshold" ).slider({
+            value: 100*self.activityThreshold,
+            orientation: "horizontal",
+            max: 100,
+            range: "min",
+            animate: true,
+            slide: function() { self.setActivityThreshold() },
+            change: function() { self.setActivityThreshold() }        
         });
     }
 
@@ -186,9 +196,23 @@ function Camera() {
     * @method setThreshold
     */    
     this.setThreshold = function() {
-        this.thresholdVal = $("#threshold").slider("value");       
+        this.thresholdVal = $("#threshold").slider("value");   
     }
 
+
+
+   /**
+    * setActivityThreshold
+    * callback for activity threshold scroll controller
+    *
+    * @namespace Camera
+    * @method setActivityThreshold
+    */    
+    this.setActivityThreshold = function() {
+        var val = $("#activity_threshold").slider("value")
+        this.activityThreshold = val/100.0;
+    }
+    
 
    /**
     * postActivity

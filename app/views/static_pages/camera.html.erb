@@ -9,17 +9,36 @@
     });
 </script>
 
-<div>
-    <video id="live" width="320" height="240" autoplay style="display: none;"></video>
-    <canvas width="320" id="canvas" height="240" style="display: inline;"></canvas>
-    <canvas width="320" id="diff_canvas" height="240" style="display: inline;"></canvas>
-
-    <div id = "bar_container" style = "width: 320px; position: relative; bottom: 0px;"> 
-        <div id = "activ_bar" style = "width: 100px; background-color: #fa0; height: 20px">
-        </div>
+<div class = "container">
+    <div class = "alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        currently, the camera app requires an updated version of Google Chrome.
     </div>
 
-    <div id="threshold" style="width: 300px; margin: 5px;"></div>       
-    
-    <div id = "alert" style = "width: 100%; height: 20px; background: #f00; display: none"></div>
-</div> 
+    <div>
+        <video id="live" width="320" height="240" autoplay style="display: none;"></video>
+        <canvas width="320" id="canvas" height="240" style="display: inline;"></canvas>
+        <canvas width="320" id="diff_canvas" height="240" style="display: inline;"></canvas>
+
+        <div id = "bar_container" style = "width: 320px; position: relative; bottom: 0px;"> 
+            <div id = "activ_bar" style = "width: 100px; background-color: #fa0; height: 20px">
+            </div>
+        </div>
+
+        <br>
+        
+        image threshold (lower = more tolerant)
+        <div id="threshold" style="width: 300px; margin: 5px;"></div>       
+
+        <br>
+
+        movement threshold (lower = more sensitive)
+        <div id="activity_threshold" style="width: 300px; margin: 5px;"></div>  
+
+        <br>
+
+        <div id = "alert_bar" style = "">
+            <b>movement detected</b>
+        </div>
+    </div> 
+</div>
