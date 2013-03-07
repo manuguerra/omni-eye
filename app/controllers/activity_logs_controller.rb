@@ -15,7 +15,7 @@ class ActivityLogsController < ApplicationController
     before_filter   :signed_in_user
     before_filter   :correct_user,              :only => [:show]
     before_filter   :filter_excessive_posts,    :only => [:create]
-    before_filter   :cache_expiration
+    # before_filter   :cache_expiration
 
     # index
     #
