@@ -46,10 +46,10 @@ class ActivityLogsController < ApplicationController
         else
             # default interval is 1 hour
             if !@begin or !@begin.to_datetime
-                @begin = @activity_logs.last.updated_at - 1.hour
+                @begin = Time.now - 1.hour
             end
             if !@end or !@end.to_datetime
-                @end = @activity_logs.last.updated_at + 1.hour
+                @end = Time.now + 1.hour
             end
 
             @selected_activities = @activity_logs.where(:updated_at => @begin.to_datetime..@end.to_datetime)
