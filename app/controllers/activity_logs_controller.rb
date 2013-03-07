@@ -15,6 +15,7 @@ class ActivityLogsController < ApplicationController
     before_filter   :signed_in_user
     before_filter   :correct_user,              :only => [:show]
     before_filter   :filter_excessive_posts,    :only => [:create]
+    before_filter   :cache_expiration
 
     # index
     #
@@ -163,5 +164,10 @@ class ActivityLogsController < ApplicationController
             if @last_activity and Time.now - @last_activity.created_at < OmniEye::INTERVAL_BETWEEN_ACTIVITY_UPDATES
                 render :json => { :sucess => false, :errors => "too many posts in a short interval" }
             end
+        end
+
+        
+        def cache_expiration
+            expires_now
         end
 end
