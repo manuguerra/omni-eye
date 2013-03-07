@@ -1,0 +1,45 @@
+<center>
+    <div class = "container" style = "text-align: left">
+
+        <div class="hero-unit custom-hero">
+            <h1>Welcome to OmniEye</h1>
+            <p>
+                A cloud based video surveillance system. <br>
+            </p>
+            <p>
+                <% if !current_user %>
+                    <a class="btn btn-info btn-large" href = "/login">sign in</a>
+                <% end %>
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="span4">
+                <h2>Real time monitoring</h2>
+                <p>
+                Monitor relevant features on real time, wherever you are.
+                Get reports on movement intensity, faces <span class = "muted">(coming soon!)</span>, license plates <span class = "muted">(coming soon)</span>, and so on.
+                Receive informations through email and SMS <span class = "muted">(coming soon!)</span>.
+                </p>
+                <p><a class="btn" href="/monitor" target ="_blank">Try it now &raquo;</a></p>
+            </div>
+            <div class="span4">
+                <h2>WebCamera app</h2>
+                <p>
+                You can use a webcam and your browser as a surveillance system. There's nothing to install.  <span class = "muted">(currently, it only runs on an updated version of Google Chrome)</span>
+                </p>
+                <p><a class="btn" href="/camera" target = "_blank">Try it now &raquo;</a></p>
+            </div>
+            <div class="span4">
+                <h2>Restful API</h2>
+                <p>
+                Connect multiple clients and hardware through OmniEye's API  <span class = "muted">(coming soon!)</span>. Speaking of which, a Raspberry-Pi client is on the way!
+                </p>
+            </div>
+        </div>
+        <hr>
+          <footer>
+            <p>&copy; 2013 Manuel Guera</p>
+          </footer>
+    </div>
+</center>

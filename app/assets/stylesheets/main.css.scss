@@ -30,3 +30,12 @@ body {
         text-decoration: none;
     }
 }
+
+.custom-hero {
+    
+    background: rgba(235,235,235,0.5);
+
+    -moz-box-shadow: 0px 0px 10px 2px #ddd;
+    -webkit-box-shadow: 0px 0px 10px 2px #ddd;
+    box-shadow: 0px 0px 5px 10px 2px #ddd;    
+}
